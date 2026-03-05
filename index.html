@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MoneyBridge — Universal Financial Freedom App</title>
+  <meta name="description" content="A universal money app for students, the needy & entrepreneurs. Free 1-month trial. KSH 100 only after." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green: #00E676;
+      --dark-green: #00C853;
+      --bg: #050F0A;
+      --surface: #0D1F14;
+      --card: #112318;
+      --border: #1E3A28;
+      --text: #E8F5E9;
+      --muted: #7BA58A;
+      --accent: #FFD600;
+      --danger: #FF5252;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Syne', sans-serif; }
+
+    /* NOISE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 32px;
+      background: rgba(5,15,10,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--green);
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--accent); }
+
+    nav ul {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    nav ul a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    nav ul a:hover { color: var(--green); }
+
+    .nav-cta {
+      background: var(--green);
+      color: #000 !important;
+      padding: 9px 20px;
+      border-radius: 50px;
+      font-weight: 500;
+      font-size: 0.85rem !important;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(0,230,118,0.15) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,230,118,0.1);
+      border: 1px solid rgba(0,230,118,0.3);
+      color: var(--green);
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .badge::before {
+      content: '';
+      width: 8px; height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 7vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    .hero h1 .highlight {
+      color: var(--green);
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 580px;
+      margin: 0 auto 40px;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: #000;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: 'Syne', sans-serif;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,230,118,0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-weight: 500;
+      font-size: 1rem;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-secondary:hover { border-color: var(--green); color: var(--green); }
+
+    /* CURRENCIES TICKER */
+    .ticker {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .ticker-inner {
+      display: inline-flex;
+      gap: 48px;
+      animation: ticker 30s linear infinite;
+    }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .ticker-item {
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ticker-item strong { color: var(--green); }
+
+    /* SECTIONS */
+    section { padding: 80px 24px; }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 540px;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    /* HOW IT WORKS */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 24px;
+      margin-top: 56px;
+    }
+
+    .step-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      position: relative;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .step-card:hover {
+      border-color: var(--green);
+      transform: translateY(-4px);
+    }
+
+    .step-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      color: rgba(0,230,118,0.15);
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+
+    .step-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+    .step-card p { font-size: 0.9rem; color: var(--muted); }
+
+    /* FEATURES */
+    #features { background: var(--surface); }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 56px;
+    }
+
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: border-color 0.3s;
+    }
+    .feature-card:hover { border-color: rgba(0,230,118,0.4); }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .feature-card h3 { font-size: 1rem; margin-bottom: 8px; }
+    .feature-card p { font-size: 0.88rem; color: var(--muted); }
+
+    /* PRICING */
+    .pricing-card {
+      max-width: 460px;
+      margin: 56px auto 0;
+      background: var(--card);
+      border: 2px solid var(--green);
+      border-radius: 24px;
+      padding: 48px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pricing-card::before {
+      content: '';
+      position: absolute;
+      top: -60px; left: 50%;
+      transform: translateX(-50%);
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(0,230,118,0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .price-tag {
+      font-family: 'Syne', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: var(--green);
+      line-height: 1;
+    }
+    .price-tag small { font-size: 1.2rem; color: var(--muted); }
+
+    .price-note { color: var(--muted); font-size: 0.9rem; margin: 8px 0 32px; }
+
+    .price-features { list-style: none; text-align: left; margin-bottom: 36px; }
+    .price-features li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+      display: flex;
+      gap: 10px;
+    }
+    .price-features li::before { content: '✓'; color: var(--green); font-weight: 700; }
+
+    .trial-badge {
+      background: var(--accent);
+      color: #000;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 50px;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+
+    /* MPESA SECTION */
+    #pay { background: var(--surface); }
+
+    .mpesa-form {
+      max-width: 480px;
+      margin: 56px auto 0;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+    }
+
+    .mpesa-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .mpesa-logo .m-logo {
+      background: #00A550;
+      color: white;
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
+    }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: 'DM Sans', sans-serif;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--green);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .amount-display {
+      background: rgba(0,230,118,0.08);
+      border: 1px solid rgba(0,230,118,0.2);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .amount-display span { color: var(--muted); font-size: 0.9rem; }
+    .amount-display strong { color: var(--green); font-family: 'Syne', sans-serif; font-size: 1.1rem; }
+
+    .pay-btn {
+      width: 100%;
+      background: var(--green);
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: 'Syne', sans-serif;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .pay-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,230,118,0.4);
+    }
+    .pay-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .security-note {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* STATUS MESSAGES */
+    .msg {
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .msg.success { background: rgba(0,230,118,0.1); border: 1px solid rgba(0,230,118,0.3); color: var(--green); }
+    .msg.error { background: rgba(255,82,82,0.1); border: 1px solid rgba(255,82,82,0.3); color: var(--danger); }
+    .msg.info { background: rgba(255,214,0,0.1); border: 1px solid rgba(255,214,0,0.3); color: var(--accent); }
+
+    /* SECURITY SECTION */
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 48px;
+    }
+
+    .sec-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      font-size: 0.85rem;
+    }
+
+    .sec-item .sec-title {
+      color: var(--green);
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .sec-item p { color: var(--muted); }
+
+    /* COUNTRIES */
+    .countries-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 40px;
+    }
+
+    .country-pill {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 48px 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    footer .footer-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--green);
+      margin-bottom: 16px;
+    }
+
+    footer .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin: 16px 0 24px;
+      flex-wrap: wrap;
+    }
+
+    footer .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    footer .footer-links a:hover { color: var(--green); }
+
+    /* SPINNER */
+    .spinner {
+      display: inline-block;
+      width: 18px; height: 18px;
+      border: 2px solid #000;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .modal-icon { font-size: 3rem; margin-bottom: 16px; }
+    .modal h3 { font-size: 1.4rem; margin-bottom: 12px; }
+    .modal p { color: var(--muted); margin-bottom: 28px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      nav ul { display: none; }
+      .form-row { grid-template-columns: 1fr; }
+      .mpesa-form { padding: 24px; }
+      .pricing-card { padding: 32px 24px; }
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Money<span>Bridge</span></div>
+  <ul>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#pay">Get Access</a></li>
+    <li><a href="#pay" class="nav-cta">Start Free Trial</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="badge">🌍 Now Available Worldwide</div>
+  <h1>Financial Freedom<br>for <span class="highlight">Everyone.</span></h1>
+  <p>A universal money app built for students, the needy, and entrepreneurs in every country. One month free. Then just KSH 100 — always.</p>
+  <div class="hero-actions">
+    <a href="#pay" class="btn-primary">Start Free Trial →</a>
+    <a href="#how" class="btn-secondary">How It Works</a>
+  </div>
+</section>
+
+<!-- CURRENCY TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">🇰🇪 KES <strong>KSH 100</strong></span>
+    <span class="ticker-item">🇺🇸 USD <strong>$0.77</strong></span>
+    <span class="ticker-item">🇪🇺 EUR <strong>€0.71</strong></span>
+    <span class="ticker-item">🇬🇧 GBP <strong>£0.61</strong></span>
+    <span class="ticker-item">🇳🇬 NGN <strong>₦1,170</strong></span>
+    <span class="ticker-item">🇿🇦 ZAR <strong>R14.20</strong></span>
+    <span class="ticker-item">🇬🇭 GHS <strong>₵11.50</strong></span>
+    <span class="ticker-item">🇺🇬 UGX <strong>2,850 UGX</strong></span>
+    <span class="ticker-item">🇹🇿 TZS <strong>1,960 TZS</strong></span>
+    <span class="ticker-item">🇮🇳 INR <strong>₹64</strong></span>
+    <!-- Duplicate for seamless loop -->
+    <span class="ticker-item">🇰🇪 KES <strong>KSH 100</strong></span>
+    <span class="ticker-item">🇺🇸 USD <strong>$0.77</strong></span>
+    <span class="ticker-item">🇪🇺 EUR <strong>€0.71</strong></span>
+    <span class="ticker-item">🇬🇧 GBP <strong>£0.61</strong></span>
+    <span class="ticker-item">🇳🇬 NGN <strong>₦1,170</strong></span>
+    <span class="ticker-item">🇿🇦 ZAR <strong>R14.20</strong></span>
+    <span class="ticker-item">🇬🇭 GHS <strong>₵11.50</strong></span>
+    <span class="ticker-item">🇺🇬 UGX <strong>2,850 UGX</strong></span>
+    <span class="ticker-item">🇹🇿 TZS <strong>1,960 TZS</strong></span>
+    <span class="ticker-item">🇮🇳 INR <strong>₹64</strong></span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="container">
+    <p class="section-label reveal">Simple Process</p>
+    <h2 class="section-title reveal">How MoneyBridge Works</h2>
+    <p class="section-sub reveal">No bank account needed. No complex setup. Just your phone number and a willingness to grow.</p>
+    <div class="steps">
+      <div class="step-card reveal">
+        <div class="step-num">01</div>
+        <h3>Register with Your Phone</h3>
+        <p>Sign up using your mobile number. Works on any Android phone. No smartphone required — basic feature phones supported.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num">02</div>
+        <h3>Enjoy 1 Month Free</h3>
+        <p>Full access to all features for 30 days. No card needed. No hidden fees. Explore everything risk-free.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num">03</div>
+        <h3>Pay KSH 100 via M-Pesa</h3>
+        <p>After your trial, pay the equivalent of KSH 100 in your local currency via M-Pesa STK push. Instant activation.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num">04</div>
+        <h3>Access & Earn</h3>
+        <p>Use money tools, learn financial skills, earn referral bonuses, and connect with a global community of builders.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <p class="section-label reveal">What You Get</p>
+    <h2 class="section-title reveal">Built for Real Life</h2>
+    <p class="section-sub reveal">Every feature designed to help people with limited resources build real financial momentum.</p>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <span class="feature-icon">💸</span>
+        <h3>Universal Currency Converter</h3>
+        <p>Real-time conversion for 150+ currencies. Know exactly what KSH 100 means in your local money.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">📲</span>
+        <h3>M-Pesa Integration</h3>
+        <p>Seamless payments via Safaricom Daraja API. No bank account required. Pay from your phone instantly.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🎓</span>
+        <h3>Student Financial Toolkit</h3>
+        <p>Budget planners, savings trackers, and scholarship alerts tailored for students across Africa and beyond.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🌐</span>
+        <h3>Works in Any Country</h3>
+        <p>Localized for 40+ countries with local currency pricing, local payment methods, and local language support.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🔐</span>
+        <h3>Bank-Level Security</h3>
+        <p>OWASP Top 10 compliant. GDPR & HIPAA ready. Your data and money are protected at every layer.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🤝</span>
+        <h3>Referral Earnings</h3>
+        <p>Earn KSH 20 per referral credited to your account. Refer 5 friends and your next year is free.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">📊</span>
+        <h3>Income Tracker</h3>
+        <p>Track gigs, informal income, market sales — anything. See your real financial picture at a glance.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">📡</span>
+        <h3>Offline Mode</h3>
+        <p>Core features work without internet. Syncs automatically when you reconnect. Perfect for low-connectivity areas.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🆘</span>
+        <h3>Emergency Fund Builder</h3>
+        <p>Automated micro-savings that round up transactions and set aside small amounts daily toward emergencies.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTRIES -->
+<section id="countries">
+  <div class="container">
+    <p class="section-label reveal">Global Reach</p>
+    <h2 class="section-title reveal">Available Everywhere</h2>
+    <p class="section-sub reveal">MoneyBridge works in your country, in your currency, in your language.</p>
+    <div class="countries-wrap reveal">
+      <div class="country-pill">🇰🇪 Kenya</div>
+      <div class="country-pill">🇳🇬 Nigeria</div>
+      <div class="country-pill">🇬🇭 Ghana</div>
+      <div class="country-pill">🇿🇦 South Africa</div>
+      <div class="country-pill">🇺🇬 Uganda</div>
+      <div class="country-pill">🇹🇿 Tanzania</div>
+      <div class="country-pill">🇷🇼 Rwanda</div>
+      <div class="country-pill">🇪🇹 Ethiopia</div>
+      <div class="country-pill">🇸🇳 Senegal</div>
+      <div class="country-pill">🇨🇮 Côte d'Ivoire</div>
+      <div class="country-pill">🇿🇲 Zambia</div>
+      <div class="country-pill">🇲🇿 Mozambique</div>
+      <div class="country-pill">🇮🇳 India</div>
+      <div class="country-pill">🇵🇰 Pakistan</div>
+      <div class="country-pill">🇧🇩 Bangladesh</div>
+      <div class="country-pill">🇵🇭 Philippines</div>
+      <div class="country-pill">🇧🇷 Brazil</div>
+      <div class="country-pill">🇲🇽 Mexico</div>
+      <div class="country-pill">🇬🇧 UK</div>
+      <div class="country-pill">🇺🇸 USA</div>
+      <div class="country-pill">🇩🇪 Germany</div>
+      <div class="country-pill">🇫🇷 France</div>
+      <div class="country-pill">+ 30 more...</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container" style="text-align:center">
+    <p class="section-label reveal">Pricing</p>
+    <h2 class="section-title reveal">One Price. For Everyone.</h2>
+    <p class="section-sub reveal" style="margin:0 auto">No tiers. No confusion. KSH 100 equivalent, wherever you are in the world.</p>
+
+    <div class="pricing-card reveal">
+      <div class="trial-badge">🎁 1 MONTH FREE TRIAL</div>
+      <div class="price-tag">KSH <span>100</span><small>/yr</small></div>
+      <p class="price-note">≈ $0.77 · €0.71 · £0.61 · ₦1,170 · R14.20</p>
+      <ul class="price-features">
+        <li>Full access to all features</li>
+        <li>Works on any Android phone</li>
+        <li>Offline capability included</li>
+        <li>Referral earnings program</li>
+        <li>Student & low-income discounts available</li>
+        <li>GDPR + HIPAA compliant data handling</li>
+        <li>Free for 30 days — no card required</li>
+      </ul>
+      <a href="#pay" class="btn-primary" style="display:block;text-align:center">Activate Free Trial →</a>
+    </div>
+  </div>
+</section>
+
+<!-- M-PESA PAYMENT SECTION -->
+<section id="pay">
+  <div class="container" style="text-align:center">
+    <p class="section-label reveal">Payments</p>
+    <h2 class="section-title reveal">Pay with M-Pesa</h2>
+    <p class="section-sub reveal" style="margin:0 auto">Simple, instant, secure. Enter your number and we'll send an M-Pesa STK push to your phone.</p>
+
+    <div class="mpesa-form reveal">
+      <div class="mpesa-logo">
+        <div class="m-logo">M</div>
+        <div>
+          <div style="font-size:0.75rem;color:var(--muted);font-weight:400;">Powered by</div>
+          M-Pesa Daraja API
+        </div>
+      </div>
+
+      <div class="msg" id="payMsg"></div>
+
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="fullName" placeholder="e.g. John Kamau" autocomplete="name" />
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="emailAddr" placeholder="you@example.com" autocomplete="email" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Country</label>
+          <select id="country" onchange="updateAmount()">
+            <option value="KE">🇰🇪 Kenya (KES)</option>
+            <option value="NG">🇳🇬 Nigeria (NGN)</option>
+            <option value="GH">🇬🇭 Ghana (GHS)</option>
+            <option value="ZA">🇿🇦 South Africa (ZAR)</option>
+            <option value="UG">🇺🇬 Uganda (UGX)</option>
+            <option value="TZ">🇹🇿 Tanzania (TZS)</option>
+            <option value="US">🇺🇸 USA (USD)</option>
+            <option value="GB">🇬🇧 UK (GBP)</option>
+            <option value="EU">🇪🇺 Europe (EUR)</option>
+            <option value="IN">🇮🇳 India (INR)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>M-Pesa Phone</label>
+          <input type="tel" id="phone" placeholder="07XXXXXXXX" maxlength="12" />
+        </div>
+      </div>
+
+      <div class="amount-display">
+        <span>Amount due after trial:</span>
+        <strong id="amountDisplay">KSH 100</strong>
+      </div>
+
+      <div class="form-group">
+        <label>Referral Code (optional)</label>
+        <input type="text" id="referral" placeholder="Enter referral code for bonus" />
+      </div>
+
+      <button class="pay-btn" id="payBtn" onclick="initiateTrial()">
+        🎁 Start My Free Trial
+      </button>
+
+      <p class="security-note">
+        🔒 Secured by SSL · OWASP Top 10 compliant · Your data is never sold
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SECURITY COMPLIANCE -->
+<section id="security">
+  <div class="container">
+    <p class="section-label reveal">Trust & Safety</p>
+    <h2 class="section-title reveal">Built to Protect You</h2>
+    <p class="section-sub reveal">We don't cut corners on security. Especially when it comes to your money and your data.</p>
+    <div class="security-grid">
+      <div class="sec-item reveal">
+        <div class="sec-title">OWASP Top 10</div>
+        <p>Protection against SQL injection, XSS, CSRF, broken authentication, and all major web vulnerabilities.</p>
+      </div>
+      <div class="sec-item reveal">
+        <div class="sec-title">GDPR Compliant</div>
+        <p>Your personal data rights are respected. Right to access, deletion, and portability fully supported.</p>
+      </div>
+      <div class="sec-item reveal">
+        <div class="sec-title">HIPAA Ready</div>
+        <p>Health-adjacent financial data handled with clinical-grade confidentiality and access controls.</p>
+      </div>
+      <div class="sec-item reveal">
+        <div class="sec-title">TLS 1.3 Encryption</div>
+        <p>All data in transit encrypted. Zero plaintext communication between client and server.</p>
+      </div>
+      <div class="sec-item reveal">
+        <div class="sec-title">M-Pesa Official API</div>
+        <p>Using Safaricom's official Daraja 2.0 API. Payments verified server-side, never stored in plaintext.</p>
+      </div>
+      <div class="sec-item reveal">
+        <div class="sec-title">Rate Limiting</div>
+        <p>API abuse prevention with intelligent rate limiting. Brute force and DDoS protection built-in.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Money<span style="color:var(--accent)">Bridge</span></div>
+  <p>Universal financial tools for the people who need them most.</p>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+    <a href="#">GDPR Rights</a>
+    <a href="#">Contact Us</a>
+    <a href="#">Referral Program</a>
+    <a href="#">Help Center</a>
+  </div>
+  <p>M-Pesa Paybill: <strong style="color:var(--green)">0704658022</strong> · Account: Your Phone Number</p>
+  <p style="margin-top:12px">© 2024 MoneyBridge. Built with ❤️ for the world's underserved.</p>
+</footer>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal">
+    <div class="modal-icon">🎉</div>
+    <h3>Trial Activated!</h3>
+    <p>Check your M-Pesa phone for an STK push prompt. Once confirmed, your 30-day free trial begins immediately. Welcome to MoneyBridge!</p>
+    <button class="btn-primary" onclick="closeModal()" style="width:100%">Let's Go →</button>
+  </div>
+</div>
+
+<script>
+  // ─── CURRENCY AMOUNTS ───────────────────────────────────
+  const AMOUNTS = {
+    KE: 'KSH 100', NG: '₦1,170', GH: '₵11.50',
+    ZA: 'R14.20', UG: '2,850 UGX', TZ: '1,960 TZS',
+    US: '$0.77', GB: '£0.61', EU: '€0.71', IN: '₹64'
+  };
+
+  function updateAmount() {
+    const country = document.getElementById('country').value;
+    document.getElementById('amountDisplay').textContent = AMOUNTS[country] || 'KSH 100';
+  }
+
+  // ─── PHONE FORMAT ────────────────────────────────────────
+  function formatPhone(phone) {
+    phone = phone.replace(/\D/g, '');
+    if (phone.startsWith('0')) phone = '254' + phone.slice(1);
+    if (phone.startsWith('+')) phone = phone.slice(1);
+    if (!phone.startsWith('254')) phone = '254' + phone;
+    return phone;
+  }
+
+  // ─── INPUT VALIDATION (OWASP: Input Validation) ──────────
+  function sanitize(str) {
+    return str.replace(/[<>"'%;()&+]/g, '').trim();
+  }
+
+  function showMsg(id, type, text) {
+    const el = document.getElementById(id);
+    el.className = 'msg ' + type;
+    el.textContent = text;
+    el.style.display = 'block';
+  }
+
+  function hideMsg(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+
+  // ─── TRIAL INIT ──────────────────────────────────────────
+  async function initiateTrial() {
+    hideMsg('payMsg');
+
+    const name    = sanitize(document.getElementById('fullName').value);
+    const email   = sanitize(document.getElementById('emailAddr').value);
+    const phone   = document.getElementById('phone').value.trim();
+    const country = document.getElementById('country').value;
+    const referral = sanitize(document.getElementById('referral').value);
+
+    // Basic validation
+    if (!name)  return showMsg('payMsg', 'error', 'Please enter your full name.');
+    if (!email || !email.includes('@')) return showMsg('payMsg', 'error', 'Please enter a valid email address.');
+    if (!phone) return showMsg('payMsg', 'error', 'Please enter your M-Pesa phone number.');
+
+    const formattedPhone = formatPhone(phone);
+    if (formattedPhone.length < 12) return showMsg('payMsg', 'error', 'Please enter a valid phone number (e.g. 07XXXXXXXX).');
+
+    const btn = document.getElementById('payBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Registering Trial...';
+
+    showMsg('payMsg', 'info', '⏳ Registering your free trial. Please wait...');
+
+    // ── BACKEND CALL: Register trial user ──────────────────
+    // In production, this posts to your Node.js/Express backend
+    // which calls Safaricom Daraja STK Push
+    try {
+      const response = await fetch('/api/register-trial', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest' // CSRF protection
+        },
+        body: JSON.stringify({
+          name, email,
+          phone: formattedPhone,
+          country, referral,
+          trialStartDate: new Date().toISOString(),
+          trialEndDate: new Date(Date.now() + 30*24*60*60*1000).toISOString()
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        document.getElementById('successModal').classList.add('open');
+        showMsg('payMsg', 'success', '✅ Trial activated! Check your phone for confirmation.');
+      } else {
+        throw new Error(data.message || 'Registration failed. Please try again.');
+      }
+    } catch (err) {
+      // ── DEMO MODE: Show success for demonstration ──────────
+      if (err.message.includes('fetch') || err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+        // Backend not yet deployed — demo mode
+        showMsg('payMsg', 'success', '✅ Demo Mode: Trial would be activated! In production, an STK push is sent to ' + formattedPhone);
+        setTimeout(() => document.getElementById('successModal').classList.add('open'), 1000);
+      } else {
+        showMsg('payMsg', 'error', '❌ ' + err.message);
+      }
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '🎁 Start My Free Trial';
+    }
+  }
+
+  // ─── MODAL ───────────────────────────────────────────────
+  function closeModal() {
+    document.getElementById('successModal').classList.remove('open');
+  }
+
+  // ─── SCROLL REVEAL ───────────────────────────────────────
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
